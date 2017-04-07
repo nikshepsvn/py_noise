@@ -109,13 +109,22 @@ def random_fb():
     print("Facebook not implemented yet ... ")
 
 def random_youtube():
-    print("Youtube not implemented yet ... ")
+    site = "http://ytroulette.com/"
+    driver.get(site)
+    #Time turned off to minimize the amount of data and bandwidth of videos
+    #time.sleep(randint(0,2))
+    print "currently on site: " + driver.current_url
 
 def random_tumblr():
     print("Tumblr not implemented yet ... ")
 
 def random_amazon():
-    print("Amazon not implemented yet ... ")
+    #Currently only generates random searches
+    rndword = words[randint(0,4553)]
+    site = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=" + rndword
+    driver.get(site)
+    time.sleep(randint(0,5))
+    print "currently on site: " + driver.current_url
 
 def random_ebay():
     iterations = randint(1,8)
@@ -126,7 +135,7 @@ def random_ebay():
         element.click();
         time.sleep(randint(0,7))
         print "currently on site: " + driver.current_url
-        count = count +1
+        count += 1
         if count == iterations:
             break;
 
