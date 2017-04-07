@@ -109,7 +109,11 @@ def random_fb():
     print("Facebook not implemented yet ... ")
 
 def random_youtube():
-    print("Youtube not implemented yet ... ")
+    site = "http://ytroulette.com/"
+    driver.get(site)
+    #Time turned off to minimize the amount of data and bandwidth of videos
+    #time.sleep(randint(0,2))
+    print "currently on site: " + driver.current_url
 
 def random_tumblr():
     print("Tumblr not implemented yet ... ")
