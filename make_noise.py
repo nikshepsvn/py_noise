@@ -12,44 +12,42 @@ with open(os.getcwd()+'/data/nounlist.txt') as f:
     words = f.read().splitlines()
 
 #function to initialize drivers based on OS and platform
-def init_drivers():
-    print("Starting drivers ... ")
-
-    # checking if user is attempting to run ScatterFly on a RPi, and if so, initializing different drivers.
-    if 'raspberrypi' in platform.uname() or 'armv7l' == platform.machine():
-        #if user is running on raspberrypi and hasnt set up xvfb properly print instruction on how to set up and exit code
-        if not os.getenv('DISPLAY'):
-            print("make sure to start a virtual display:")
+def setupDriver():
+    un = platform.uname()
+    op_system = platform.system()
+    cwd = os.getcwd()
+    # Set raspberry pi options
+    if (un == 'raspberrypi') or (un == 'arm7l'):
+        # Check for xvfb and instruct accordingly
+        if not os.getenv('DISPAY'):
+            print("Start a virtual display with this command:")
             print("Xvfb :99 -ac &")
             print("export DISPLAY=:99")
             sys.exit(1)
 
-        #adding user agent and headless argument to browser
+        # Define Firefox option arguments
         from selenium.webdriver.firefox.options import Options
         firefox_options = Options()
         firefox_options.add_argument("--headless")
         firefox_options.add_argument("--mute-audio")
-        firefox_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")
+        firefox_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/547.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")
 
-        #initializing the driver for RPi
-        p = os.getcwd() + '/drivers/geckodriver_arm7'
-        return webdriver.Firefox(executable_path=p, firefox_options=firefox_options)
+        return (firefox_options)
 
     else:
-        #adding user agent and headless argument to browser
+        # Define Chrome option arguments
         from selenium.webdriver.chrome.options import Options
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--mute-audio")
         chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")
 
-        #choosing chrome driver based on OS and initializing it for further use
-        if 'Linux' in (platform.system()):
-            return webdriver.Chrome(os.getcwd()+'/drivers/chromedriver_linux',chrome_options=chrome_options)
-        elif 'Windows' in (platform.system()):
-            return webdriver.Chrome(os.getcwd()+'/drivers/chromedriver.exe',chrome_options=chrome_options)
-        elif 'Darwin' in (platform.system()):
-            return webdriver.Chrome(os.getcwd()+'/drivers/chromedriver_mac',chrome_options=chrome_options)
+        if ('Linux' in op_system):
+            return webdriver.Chrome(cwd+'/drivers/chromedriver_linux', chrome_options=chrome_options)
+        elif ('Windows' in op_system):
+            return webdriver.Chrome(cwd+'/drivers/chromedriver.exe',chrome_options=chrome_options)
+        elif ('Darwin' in op_system):
+            return webdriver.Chrome(cwd+'/drivers/chromedriver_mac',chrome_options=chrome_options)
 
 #get_input is a function gets information from the user
 def get_input():
@@ -178,7 +176,7 @@ def start_noise(linklist, sites_dict):
 
 #main method
 if __name__ == "__main__":
-    driver = init_drivers()
+    driver = setupDriver()
     linklist, sites_dict = get_input()
     print "ScatterFly is now going to start generating some random traffic."
     start_noise(linklist, sites_dict)
