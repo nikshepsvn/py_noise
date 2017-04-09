@@ -33,7 +33,7 @@ def setupDriver():
         firefox_options.add_argument("--mute-audio")
         firefox_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/547.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36")
 
-        return (firefox_options)
+        return (webdriver.Firefox(executable_path=p, firefox_options=firefox_options))
 
     else:
         # Define Chrome option arguments
